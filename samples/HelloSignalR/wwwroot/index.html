@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-2.1.4.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signalr.js/2.2.0/jquery.signalR.js" type="text/javascript"></script>
+    <link href="styles/sample.css" rel="stylesheet" />
+    <title>ASOS SignalR Sample</title>
+    <script type="text/javascript">
+        'use strict';
+        $(document).ready(function () {
+            var connectionBase = "http://localhost:5000";
+            var connectionPath = connectionBase + "/signalr";
+
+            var connectToSignalR = function (token) {
+                var connection = $.connection(connectionPath, "access_token=" + token);
+                var log = function (data) { console.log(data); }
+
+                connection.received(function (data) {
+                    log("From server: " + data);
+                });
+
+                connection.stateChanged(function (change) {
+                    switch (change.newState) {
+                        case $.signalR.connectionState.reconnecting:
+                            log('Re-connecting');
+                            break;
+                        case $.signalR.connectionState.connected:
+                            log("Connected to " + connection.url);
+                            break;
+                        case $.signalR.connectionState.disconnected:
+                            log("Disconnected");
+                            break;
+                    }
+                });
+
+                connection.start().done(function () {
+                    connection.send("Test message");
+                });
+            };
+
+            $.ajax({
+                type: "POST",
+                url: connectionBase + "/connect/token",
+                data: "client_id=AspNetContribSample"
+                       + "&grant_type=password"
+                       + "&username=AspNet"
+                       + "&password=contrib"
+                       + "&resource=" + encodeURIComponent("http://localhost:5000/"),
+                contentType: "application/x-www-form-urlencoded"
+            }).then(function (data) {
+                connectToSignalR(data.access_token);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>AspNet.Security.OpenIdConnect.Server SignalR Sample</h1>
+    <div>To open console press <code>Ctrl + Shift + I</code> / <code>Cmd + Shift + I</code> / <code>F12</code> and choose <code>Console</code> tab</div>
+</body>
+</html>

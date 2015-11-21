@@ -1,0 +1,18 @@
+﻿@import 'reset.css';
+
+body {
+    padding: 10px;
+}
+
+h1 {
+    padding-bottom: 12px;
+}
+
+code {
+    display: inline-block;
+    background: #ccc;
+    padding: 7px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    border-radius: 3px;
+}
