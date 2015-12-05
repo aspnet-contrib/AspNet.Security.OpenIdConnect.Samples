@@ -1,0 +1,40 @@
+{
+    "webroot": "wwwroot",
+    "exclude": "wwwroot/**/*.*",
+
+    "version": "1.0.0-beta4",
+
+    "dependencies": {
+        "EntityFramework.InMemory": "7.0.0-rc1-final",
+
+        "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
+        "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+
+        "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+
+        "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta4"
+    },
+
+    "commands": {
+        "web": "Microsoft.AspNet.Server.Kestrel"
+    },
+
+    "frameworks": {
+        "dnx451": {
+            "dependencies": {
+                "Microsoft.AspNet.Owin": "1.0.0-rc1-final",
+                "Microsoft.Owin": "3.0.0",
+                "NWebsec.Owin": "1.0.0"
+            }
+        },
+
+        "dnxcore50": { }
+    }
+}

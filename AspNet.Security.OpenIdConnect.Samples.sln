@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HelloSignalR", "samples\HelloSignalR\HelloSignalR.xproj", "{BB7CE31F-BC7C-4F8B-8F05-19024ABD064D}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HelloSignalR", "samples\SignalR\HelloSignalR\HelloSignalR.xproj", "{BB7CE31F-BC7C-4F8B-8F05-19024ABD064D}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Mvc.Client", "samples\Mvc\Mvc.Client\Mvc.Client.xproj", "{68631868-902A-46FB-9A44-BACF1812FBDE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Mvc.Server", "samples\Mvc\Mvc.Server\Mvc.Server.xproj", "{440B6A0C-05F3-4483-B4AA-FB0BC4B239FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SignalR", "SignalR", "{61F3E0D4-509C-4F0B-BD9F-DC1444C41368}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc", "Mvc", "{139182EF-E215-4E9C-91AA-312F29B33A76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +23,21 @@ Global
 		{BB7CE31F-BC7C-4F8B-8F05-19024ABD064D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB7CE31F-BC7C-4F8B-8F05-19024ABD064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB7CE31F-BC7C-4F8B-8F05-19024ABD064D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68631868-902A-46FB-9A44-BACF1812FBDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68631868-902A-46FB-9A44-BACF1812FBDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68631868-902A-46FB-9A44-BACF1812FBDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68631868-902A-46FB-9A44-BACF1812FBDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{440B6A0C-05F3-4483-B4AA-FB0BC4B239FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{440B6A0C-05F3-4483-B4AA-FB0BC4B239FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{440B6A0C-05F3-4483-B4AA-FB0BC4B239FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{440B6A0C-05F3-4483-B4AA-FB0BC4B239FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB7CE31F-BC7C-4F8B-8F05-19024ABD064D} = {61F3E0D4-509C-4F0B-BD9F-DC1444C41368}
+		{68631868-902A-46FB-9A44-BACF1812FBDE} = {139182EF-E215-4E9C-91AA-312F29B33A76}
+		{440B6A0C-05F3-4483-B4AA-FB0BC4B239FF} = {139182EF-E215-4E9C-91AA-312F29B33A76}
 	EndGlobalSection
 EndGlobal
