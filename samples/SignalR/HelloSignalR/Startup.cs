@@ -38,10 +38,10 @@ namespace HelloSignalR {
                 options.RequireHttpsMetadata = !environment.IsDevelopment();
 
                 // Note: the audience must correspond to the address of the SignalR server.
-                options.Audience = "http://localhost:5000/";
+                options.Audience = "http://localhost:5005/";
 
                 // Note: the authority must match the address of the identity server.
-                options.Authority = "http://localhost:5000/";
+                options.Authority = "http://localhost:5005/";
 
                 options.Events = new JwtBearerEvents {
                     // Note: for SignalR connections, the default Authorization header does not work,
