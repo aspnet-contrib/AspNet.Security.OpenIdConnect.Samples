@@ -134,7 +134,8 @@ namespace Mvc.Server.Controllers {
             properties.SetScopes(new[] {
                 /* openid: */ OpenIdConnectConstants.Scopes.OpenId,
                 /* email: */ OpenIdConnectConstants.Scopes.Email,
-                /* profile: */ OpenIdConnectConstants.Scopes.Profile
+                /* profile: */ OpenIdConnectConstants.Scopes.Profile,
+                /* api-resource-controller: */ "api-resource-controller"
             });
 
             // You can also limit the resources endpoints

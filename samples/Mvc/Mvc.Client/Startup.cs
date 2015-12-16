@@ -6,7 +6,6 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Mvc.Client {
@@ -63,6 +62,7 @@ namespace Mvc.Client {
                 // Note: the resource property represents the different endpoints the
                 // access token should be issued for (values must be space-delimited).
                 options.Resource = "http://localhost:54540/";
+                options.Scope.Add("api-resource-controller");
             });
 
             app.UseMvc();

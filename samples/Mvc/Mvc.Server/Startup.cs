@@ -1,6 +1,8 @@
 using System;
+using AspNet.Security.OpenIdConnect.Extensions;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Authentication.JwtBearer;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Data.Entity;
@@ -28,6 +30,16 @@ namespace Mvc.Server {
             });
 
             services.AddAuthentication();
+
+            services.AddAuthorization(options => {
+                // Add a new policy requiring a "scope" claim
+                // containing the "api-resource-controller" value.
+                options.AddPolicy("API", policy => {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireClaim(OpenIdConnectConstants.Claims.Scope, "api-resource-controller");
+                });
+            });
+
             services.AddCaching();
             services.AddMvc();
         }
