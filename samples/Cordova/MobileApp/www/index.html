@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://localhost:54540 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <title>MobileApp</title>
+
+    <!-- Load stylesheets -->
+    <link href="css/ionic.min.css" rel="stylesheet" />    
+    <!-- Load librairies -->
+    <script src="scripts/libraries/ionic.bundle.min.js"></script>
+    <script src="scripts/libraries/angular-local-storage.min.js"></script>
+    <script src="scripts/libraries/angular-jwt.min.js"></script>
+    <!-- Load app main script -->
+    <script src="scripts/init.js"></script>
+    <!-- Load services -->
+    <script src="scripts/services/authService.js"></script>
+    <script src="scripts/services/authInterceptorService.js"></script>
+    <script src="scripts/services/utilitiesService.js"></script>
+    <!-- Load controllers -->
+    <script src="scripts/controllers/authController.js"></script>
+    <!-- Load Cordova references -->
+    <script src="cordova.js"></script>
+</head>
+<body>
+    <ion-header-bar class="bar bar-header bar-dark">
+        <h1 class="title">Your application (Mobile)</h1>
+    </ion-header-bar>
+    <ion-content class="has-header" padding="true" ng-controller="authController">
+        <h2>Welcome, {{authentication.userName || 'Anonymous'}}</h2>
+        <div class="card" ng-show="message">
+            <div class="item item-text-wrap">
+                {{message}}
+            </div>
+        </div>
+        <button class="button button-block button-balanced" ng-click="logIn()" ng-hide="authentication.isAuth">
+            Sign in
+        </button>
+        <button class="button button-block button-energized" ng-click="queryServer()" ng-hide="!authentication.isAuth">
+            Check authentication
+        </button>
+        <button class="button button-block button-assertive" ng-click="logOut()" ng-hide="!authentication.isAuth">
+            Sign out
+        </button>
+    </ion-content>
+</body>
+</html>

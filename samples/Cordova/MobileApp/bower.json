@@ -1,0 +1,36 @@
+{
+  "name": "MobileApp",
+  "dependencies": {
+    "angular-local-storage": "~0.2.3",
+    "angular-jwt": "~0.0.9",
+    "ionic": "~1.2.4"
+  },
+  "exportsOverride": {
+    "angular": {
+    },
+    "angular-local-storage": {
+      "scripts/libraries": [
+        "dist/angular-local-storage.min.js"
+      ]
+    },
+    "angular-animate": {},
+    "angular-sanitize": {},
+    "angular-ui-router": {},
+    "angular-jwt": {
+      "scripts/libraries": [
+        "dist/angular-jwt.min.js"
+      ]
+    },
+    "ionic": {
+      "scripts/libraries": [
+        "release/js/ionic.bundle.min.js"
+      ],
+      "css": [
+        "release/css/ionic.min.css"
+      ],
+      "fonts": [
+        "release/fonts/*"
+      ]
+    }
+  }
+}
