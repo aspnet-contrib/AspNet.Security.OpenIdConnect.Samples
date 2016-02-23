@@ -11,10 +11,7 @@ using Microsoft.Extensions.Logging;
 using Mvc.Server.Extensions;
 using Mvc.Server.Models;
 using Mvc.Server.Providers;
-
-#if !DNXCORE50
-using NWebsec.Owin;
-#endif
+using NWebsec.Middleware;
 
 namespace Mvc.Server {
     public class Startup {
@@ -90,28 +87,17 @@ namespace Mvc.Server {
                 });
             });
 
-#if !DNXCORE50
-            app.UseOwinAppBuilder(owin => {
-                // Insert a new middleware responsible of setting the Content-Security-Policy header.
-                // See https://nwebsec.codeplex.com/wikipage?title=Configuring%20Content%20Security%20Policy&referringTitle=NWebsec
-                owin.UseCsp(options => options.DefaultSources(configuration => configuration.Self())
-                                              .ImageSources(configuration => configuration.Self().CustomSources("data:"))
-                                              .ScriptSources(configuration => configuration.UnsafeInline())
-                                              .StyleSources(configuration => configuration.Self().UnsafeInline()));
+            // Note: visit https://docs.nwebsec.com/en/4.2/nwebsec/Configuring-csp.html for more information.
+            app.UseCsp(options => options.DefaultSources(configuration => configuration.Self())
+                                         .ImageSources(configuration => configuration.Self().CustomSources("data:"))
+                                         .ScriptSources(configuration => configuration.UnsafeInline())
+                                         .StyleSources(configuration => configuration.Self().UnsafeInline()));
 
-                // Insert a new middleware responsible of setting the X-Content-Type-Options header.
-                // See https://nwebsec.codeplex.com/wikipage?title=Configuring%20security%20headers&referringTitle=NWebsec
-                owin.UseXContentTypeOptions();
+            app.UseXContentTypeOptions();
 
-                // Insert a new middleware responsible of setting the X-Frame-Options header.
-                // See https://nwebsec.codeplex.com/wikipage?title=Configuring%20security%20headers&referringTitle=NWebsec
-                owin.UseXfo(options => options.Deny());
+            app.UseXfo(options => options.Deny());
 
-                // Insert a new middleware responsible of setting the X-Xss-Protection header.
-                // See https://nwebsec.codeplex.com/wikipage?title=Configuring%20security%20headers&referringTitle=NWebsec
-                owin.UseXXssProtection(options => options.EnabledWithBlockMode());
-            });
-#endif
+            app.UseXXssProtection(options => options.EnabledWithBlockMode());
 
             app.UseOpenIdConnectServer(options => {
                 options.Provider = new AuthorizationProvider();
