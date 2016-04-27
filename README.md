@@ -27,3 +27,18 @@ Please keep in mind that, generally speaking, authorization server and resource 
 ## SignalR
 
 [Source](./samples/SignalR)
+
+## Support
+
+**Need help or wanna share your thoughts?** Don't hesitate to join our dedicated chat rooms:
+
+- **JabbR: [https://jabbr.net/#/rooms/aspnet-contrib](https://jabbr.net/#/rooms/aspnet-contrib)**
+- **Gitter: [https://gitter.im/aspnet-contrib/AspNet.Security.OpenIdConnect.Server](https://gitter.im/aspnet-contrib/AspNet.Security.OpenIdConnect.Server)** (sharing the same chat room as *AspNet.Security.OpenIdConnect.Server*)
+
+## Contributors
+
+**AspNet.Security.OpenIdConnect.Samples** is actively maintained by **[Kévin Chalet](https://github.com/PinpointTownes)**. Contributions are welcome and can be submitted using pull requests.
+
+## License
+
+This project is licensed under the **Apache License**. This means that you can use, modify and distribute it freely. See [http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html) for more details.
