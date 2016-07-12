@@ -1,122 +1,133 @@
 using System;
-using AspNet.Security.OpenIdConnect.Extensions;
-using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.JwtBearer;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
-using Microsoft.Data.Entity;
+using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
+using AspNet.Security.OAuth.Validation;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Mvc.Server.Extensions;
 using Mvc.Server.Models;
 using Mvc.Server.Providers;
-using NWebsec.Middleware;
 
 namespace Mvc.Server {
     public class Startup {
         public void ConfigureServices(IServiceCollection services) {
             services.AddEntityFramework()
-                .AddInMemoryDatabase()
+                .AddEntityFrameworkInMemoryDatabase()
                 .AddDbContext<ApplicationContext>(options => {
                     options.UseInMemoryDatabase();
                 });
 
-            services.Configure<SharedAuthenticationOptions>(options => {
+            services.AddAuthentication(options => {
                 options.SignInScheme = "ServerCookie";
             });
 
-            services.AddAuthentication();
-
-            services.AddAuthorization(options => {
-                // Add a new policy requiring a "scope" claim
-                // containing the "api-resource-controller" value.
-                options.AddPolicy("API", policy => {
-                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-                    policy.RequireClaim(OpenIdConnectConstants.Claims.Scope, "api-resource-controller");
-                });
-            });
-
-            services.AddCaching();
             services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app) {
-            var factory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
-            factory.AddConsole();
-
-            app.UseIISPlatformHandler(options => {
-                options.AuthenticationDescriptions.Clear();
-            });
-
-            app.UseStaticFiles();
+            app.UseDeveloperExceptionPage();
 
             // Create a new branch where the registered middleware will be executed only for API calls.
             app.UseWhen(context => context.Request.Path.StartsWithSegments(new PathString("/api")), branch => {
-                branch.UseJwtBearerAuthentication(options => {
-                    options.AutomaticAuthenticate = true;
-                    options.AutomaticChallenge = true;
-                    options.RequireHttpsMetadata = false;
-
-                    options.Audience = "http://localhost:54540/";
-                    options.Authority = "http://localhost:54540/";
+                branch.UseOAuthValidation(new OAuthValidationOptions {
+                    AutomaticAuthenticate = true,
+                    AutomaticChallenge = true
                 });
+
+                // Alternatively, you can also use the introspection middleware.
+                // Using it is recommended if your resource server is in a
+                // different application/separated from the authorization server.
+                // 
+                // branch.UseOAuthIntrospection(new OAuthIntrospectionOptions {
+                //     AutomaticAuthenticate = true,
+                //     AutomaticChallenge = true,
+                //     Authority = "http://localhost:54540/",
+                //     Audiences = { "resource_server" },
+                //     ClientId = "resource_server",
+                //     ClientSecret = "875sqd4s5d748z78z7ds1ff8zz8814ff88ed8ea4z4zzd"
+                // });
             });
 
             // Create a new branch where the registered middleware will be executed only for non API calls.
             app.UseWhen(context => !context.Request.Path.StartsWithSegments(new PathString("/api")), branch => {
                 // Insert a new cookies middleware in the pipeline to store
                 // the user identity returned by the external identity provider.
-                branch.UseCookieAuthentication(options => {
-                    options.AutomaticAuthenticate = true;
-                    options.AutomaticChallenge = true;
-                    options.AuthenticationScheme = "ServerCookie";
-                    options.CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie";
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                    options.LoginPath = new PathString("/signin");
+                branch.UseCookieAuthentication(new CookieAuthenticationOptions {
+                    AutomaticAuthenticate = true,
+                    AutomaticChallenge = true,
+                    AuthenticationScheme = "ServerCookie",
+                    CookieName = CookieAuthenticationDefaults.CookiePrefix + "ServerCookie",
+                    ExpireTimeSpan = TimeSpan.FromMinutes(5),
+                    LoginPath = new PathString("/signin"),
+                    LogoutPath = new PathString("/signout")
                 });
 
-                branch.UseGoogleAuthentication(options => {
-                    options.ClientId = "560027070069-37ldt4kfuohhu3m495hk2j4pjp92d382.apps.googleusercontent.com";
-                    options.ClientSecret = "n2Q-GEw9RQjzcRbU3qhfTj8f";
+                branch.UseGoogleAuthentication(new GoogleOptions {
+                    ClientId = "560027070069-37ldt4kfuohhu3m495hk2j4pjp92d382.apps.googleusercontent.com",
+                    ClientSecret = "n2Q-GEw9RQjzcRbU3qhfTj8f"
                 });
 
-                branch.UseTwitterAuthentication(options => {
-                    options.ConsumerKey = "6XaCTaLbMqfj6ww3zvZ5g";
-                    options.ConsumerSecret = "Il2eFzGIrYhz6BWjYhVXBPQSfZuS4xoHpSSyD9PI";
+                branch.UseTwitterAuthentication(new TwitterOptions {
+                    ConsumerKey = "6XaCTaLbMqfj6ww3zvZ5g",
+                    ConsumerSecret = "Il2eFzGIrYhz6BWjYhVXBPQSfZuS4xoHpSSyD9PI"
                 });
             });
 
-            // Note: visit https://docs.nwebsec.com/en/4.2/nwebsec/Configuring-csp.html for more information.
-            app.UseCsp(options => options.DefaultSources(configuration => configuration.Self())
-                                         .ImageSources(configuration => configuration.Self().CustomSources("data:"))
-                                         .ScriptSources(configuration => configuration.UnsafeInline())
-                                         .StyleSources(configuration => configuration.Self().UnsafeInline()));
-
-            app.UseXContentTypeOptions();
-
-            app.UseXfo(options => options.Deny());
-
-            app.UseXXssProtection(options => options.EnabledWithBlockMode());
-
             app.UseOpenIdConnectServer(options => {
                 options.Provider = new AuthorizationProvider();
+
+                // Enable the authorization, logout, token and userinfo endpoints.
+                options.AuthorizationEndpointPath = "/connect/authorize";
+                options.LogoutEndpointPath = "/connect/logout";
+                options.TokenEndpointPath = "/connect/token";
+                options.UserinfoEndpointPath = "/connect/userinfo";
+
+                // Note: if you don't explicitly register a signing key, one is automatically generated and
+                // persisted on the disk. If the key cannot be persisted, an exception is thrown.
+                // 
+                // On production, using a X.509 certificate stored in the machine store is recommended.
+                // You can generate a self-signed certificate using Pluralsight's self-cert utility:
+                // https://s3.amazonaws.com/pluralsight-free/keith-brown/samples/SelfCert.zip
+                // 
+                // options.SigningCredentials.AddCertificate("7D2A741FE34CC2C7369237A5F2078988E17A6A75");
+                // 
+                // Alternatively, you can also store the certificate as an embedded .pfx resource
+                // directly in this assembly or in a file published alongside this project:
+                // 
+                // options.SigningCredentials.AddCertificate(
+                //     assembly: typeof(Startup).GetTypeInfo().Assembly,
+                //     resource: "Nancy.Server.Certificate.pfx",
+                //     password: "Owin.Security.OpenIdConnect.Server");
 
                 // Note: see AuthorizationController.cs for more
                 // information concerning ApplicationCanDisplayErrors.
                 options.ApplicationCanDisplayErrors = true;
                 options.AllowInsecureHttp = true;
 
-                // Note: by default, tokens are signed using dynamically-generated
-                // RSA keys but you can also use your own certificate:
-                // options.SigningCredentials.AddCertificate(certificate);
+                // Note: to override the default access token format and use JWT, assign AccessTokenHandler:
+                // options.AccessTokenHandler = new JwtSecurityTokenHandler();
             });
+
+            app.UseStaticFiles();
 
             app.UseMvc();
 
             app.UseWelcomePage();
 
             using (var database = app.ApplicationServices.GetService<ApplicationContext>()) {
+                // Note: when using the introspection middleware, your resource server
+                // MUST be registered as an OAuth2 client and have valid credentials.
+                // 
+                // database.Applications.Add(new Application {
+                //     ApplicationID = "resource_server",
+                //     DisplayName = "Main resource server",
+                //     Secret = "875sqd4s5d748z78z7ds1ff8zz8814ff88ed8ea4z4zzd"
+                // });
+
                 database.Applications.Add(new Application {
                     ApplicationID = "myClient",
                     DisplayName = "My client application",
