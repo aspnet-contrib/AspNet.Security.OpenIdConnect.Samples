@@ -118,7 +118,8 @@ namespace Mvc.Server {
 
             app.UseWelcomePage();
 
-            using (var database = app.ApplicationServices.GetService<ApplicationContext>()) {
+            using (var context = new ApplicationContext(
+                app.ApplicationServices.GetRequiredService<DbContextOptions<ApplicationContext>>())) {
                 // Note: when using the introspection middleware, your resource server
                 // MUST be registered as an OAuth2 client and have valid credentials.
                 // 
@@ -128,7 +129,7 @@ namespace Mvc.Server {
                 //     Secret = "875sqd4s5d748z78z7ds1ff8zz8814ff88ed8ea4z4zzd"
                 // });
 
-                database.Applications.Add(new Application {
+                context.Applications.Add(new Application {
                     ApplicationID = "myClient",
                     DisplayName = "My client application",
                     RedirectUri = "http://localhost:53507/signin-oidc",
@@ -136,7 +137,7 @@ namespace Mvc.Server {
                     Secret = "secret_secret_secret"
                 });
 
-                database.SaveChanges();
+                context.SaveChanges();
             }
         }
     }
