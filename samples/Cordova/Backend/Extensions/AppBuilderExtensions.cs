@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Backend.Extensions {
+namespace Mvc.Server.Extensions {
     public static class AppBuilderExtensions {
         public static IApplicationBuilder UseWhen(this IApplicationBuilder app,
             Func<HttpContext, bool> condition, Action<IApplicationBuilder> configuration) {

@@ -1,4 +1,4 @@
-﻿namespace Backend.Models {
+﻿namespace Mvc.Server.Models {
     public class Application {
         public string ApplicationID { get; set; }
         public string DisplayName { get; set; }

@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Backend.Models;
+using Mvc.Server.Models;
 
-namespace Backend.Controllers {
+namespace Mvc.Server.Controllers {
     public class AuthorizationController : Controller {
         private readonly ApplicationContext database;
 

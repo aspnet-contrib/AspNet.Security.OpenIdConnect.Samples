@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using AspNet.Security.OAuth.Validation;
-using Backend.Extensions;
-using Backend.Models;
-using Backend.Providers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Mvc.Server.Extensions;
+using Mvc.Server.Models;
+using Mvc.Server.Providers;
 
-namespace Backend {
+namespace Mvc.Server {
     public class Startup {
         public void ConfigureServices(IServiceCollection services) {
             services.AddEntityFramework()
@@ -80,9 +80,11 @@ namespace Backend {
             app.UseOpenIdConnectServer(options => {
                 options.Provider = new AuthorizationProvider();
 
-                // Enable the authorization and logout endpoints.
+                // Enable the authorization, logout, token and userinfo endpoints.
                 options.AuthorizationEndpointPath = "/connect/authorize";
                 options.LogoutEndpointPath = "/connect/logout";
+                options.TokenEndpointPath = "/connect/token";
+                options.UserinfoEndpointPath = "/connect/userinfo";
 
                 // Note: if you don't explicitly register a signing key, one is automatically generated and
                 // persisted on the disk. If the key cannot be persisted, an exception is thrown.
@@ -98,7 +100,7 @@ namespace Backend {
                 // 
                 // options.SigningCredentials.AddCertificate(
                 //     assembly: typeof(Startup).GetTypeInfo().Assembly,
-                //     resource: "Backend.Certificate.pfx",
+                //     resource: "Nancy.Server.Certificate.pfx",
                 //     password: "Owin.Security.OpenIdConnect.Server");
 
                 // Note: see AuthorizationController.cs for more
@@ -107,7 +109,7 @@ namespace Backend {
                 options.AllowInsecureHttp = true;
 
                 // Note: to override the default access token format and use JWT, assign AccessTokenHandler:
-                // options.AccessTokenHandler = new JwtSecurityTokenHandler();
+                //options.AccessTokenHandler = new JwtSecurityTokenHandler();
             });
 
             app.UseStaticFiles();
