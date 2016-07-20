@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Mvc.Server.Extensions;
+using Backend.Extensions;
 
-namespace Mvc.Server.Controllers {
+namespace Backend.Controllers {
     public class AuthenticationController : Controller {
         [HttpGet("~/signin")]
         public ActionResult SignIn(string returnUrl = null) {

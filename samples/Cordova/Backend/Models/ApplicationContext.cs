@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Mvc.Server.Models {
+namespace Backend.Models {
     public class ApplicationContext : DbContext {
         public ApplicationContext(DbContextOptions options)
             : base(options) { }

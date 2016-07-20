@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Mvc.Server.Extensions;
-using Mvc.Server.Models;
-using Mvc.Server.Providers;
+using Backend.Extensions;
+using Backend.Models;
+using Backend.Providers;
 
 namespace Mvc.Server {
     public class Startup {
@@ -84,7 +84,7 @@ namespace Mvc.Server {
                 options.AuthorizationEndpointPath = "/connect/authorize";
                 options.LogoutEndpointPath = "/connect/logout";
                 options.TokenEndpointPath = "/connect/token";
-                options.UserinfoEndpointPath = "/connect/userinfo";
+                //options.UserinfoEndpointPath = "/connect/userinfo";
 
                 // Note: if you don't explicitly register a signing key, one is automatically generated and
                 // persisted on the disk. If the key cannot be persisted, an exception is thrown.

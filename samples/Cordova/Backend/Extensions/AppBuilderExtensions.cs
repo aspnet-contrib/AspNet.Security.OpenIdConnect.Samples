@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Mvc.Server.Extensions {
+namespace Backend.Extensions {
     public static class AppBuilderExtensions {
         public static IApplicationBuilder UseWhen(this IApplicationBuilder app,
             Func<HttpContext, bool> condition, Action<IApplicationBuilder> configuration) {

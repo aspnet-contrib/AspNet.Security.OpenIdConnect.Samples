@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Mvc.Server.Controllers {
+namespace Backend.Controllers {
     [Route("api")]
     public class ResourceController : Controller {
         [Authorize, HttpGet, Route("message")]

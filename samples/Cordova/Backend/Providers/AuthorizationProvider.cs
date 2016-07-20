@@ -5,9 +5,9 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Mvc.Server.Models;
+using Backend.Models;
 
-namespace Mvc.Server.Providers {
+namespace Backend.Providers {
     public sealed class AuthorizationProvider : OpenIdConnectServerProvider {
         public override Task MatchEndpoint(MatchEndpointContext context) {
             // Note: by default, OpenIdConnectServerHandler only handles authorization requests made to the authorization endpoint.
@@ -93,14 +93,15 @@ namespace Mvc.Server.Providers {
             // You may consider relaxing it to support the resource owner password credentials grant type
             // with JavaScript or desktop applications, where client credentials cannot be safely stored.
             // In this case, call context.Skip() to inform the server middleware the client is not trusted.
-            //if (string.IsNullOrEmpty(context.ClientId) || string.IsNullOrEmpty(context.ClientSecret)) {
-            //    context.Reject(
-            //        error: OpenIdConnectConstants.Errors.InvalidRequest,
-            //        description: "Missing credentials: ensure that your credentials were correctly " +
-            //                     "flowed in the request body or in the authorization header");
-
-            //    return;
-            //}
+            if (string.IsNullOrEmpty(context.ClientId) || string.IsNullOrEmpty(context.ClientSecret))
+            {
+                //context.Reject(
+                //    error: OpenIdConnectConstants.Errors.InvalidRequest,
+                //    description: "Missing credentials: ensure that your credentials were correctly " +
+                //                 "flowed in the request body or in the authorization header");
+                context.Skip();
+                return;
+            }
 
             var database = context.HttpContext.RequestServices.GetRequiredService<ApplicationContext>();
 
@@ -123,15 +124,16 @@ namespace Mvc.Server.Providers {
             // For that, you can use the CryptoHelper library developed by @henkmollema:
             // https://github.com/henkmollema/CryptoHelper. If you don't need .NET Core support,
             // SecurityDriven.NET/inferno is a rock-solid alternative: http://securitydriven.net/inferno/
-            //if (!string.Equals(context.ClientSecret, application.Secret, StringComparison.Ordinal)) {
-            //    context.Reject(
-            //        error: OpenIdConnectConstants.Errors.InvalidClient,
-            //        description: "Invalid credentials: ensure that you specified a correct client_secret");
+            if (!string.Equals(context.ClientSecret, application.Secret, StringComparison.Ordinal))
+            {
+                context.Reject(
+                    error: OpenIdConnectConstants.Errors.InvalidClient,
+                    description: "Invalid credentials: ensure that you specified a correct client_secret");
 
-            //    return;
-            //}
+                return;
+            }
 
-            context.Skip();
+            context.Validate();
         }
 
         public override async Task ValidateLogoutRequest(ValidateLogoutRequestContext context) {

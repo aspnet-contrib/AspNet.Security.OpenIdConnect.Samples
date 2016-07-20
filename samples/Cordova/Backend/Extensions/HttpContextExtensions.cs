@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 
-namespace Mvc.Server.Extensions {
+namespace Backend.Extensions {
     public static class HttpContextExtensions {
         public static IEnumerable<AuthenticationDescription> GetExternalProviders(this HttpContext context) {
             if (context == null) {
