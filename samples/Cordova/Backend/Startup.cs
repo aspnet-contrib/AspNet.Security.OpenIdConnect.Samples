@@ -12,7 +12,7 @@ using Backend.Extensions;
 using Backend.Models;
 using Backend.Providers;
 
-namespace Mvc.Server {
+namespace Backend {
     public class Startup {
         public void ConfigureServices(IServiceCollection services) {
             services.AddEntityFramework()
@@ -100,7 +100,7 @@ namespace Mvc.Server {
                 // 
                 // options.SigningCredentials.AddCertificate(
                 //     assembly: typeof(Startup).GetTypeInfo().Assembly,
-                //     resource: "Nancy.Server.Certificate.pfx",
+                //     resource: "Backend.Certificate.pfx",
                 //     password: "Owin.Security.OpenIdConnect.Server");
 
                 // Note: see AuthorizationController.cs for more
