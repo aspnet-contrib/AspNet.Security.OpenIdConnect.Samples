@@ -4,6 +4,8 @@ app.constant('authConfig', {
     clientId: 'myClient',
     logInApi: 'http://localhost:54540/connect/authorize',
     logOutApi: 'http://localhost:54540/connect/logout',
+    tokenApi: 'http://localhost:54540/connect/token',
+    messageApi: 'http://localhost:54540/api/message',
     redirect_uri: 'http://localhost/callback',
     post_logout_redirect_uri: 'http://localhost/callback'
 });

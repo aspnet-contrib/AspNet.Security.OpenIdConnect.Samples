@@ -1,6 +1,4 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
+using System;
 using AspNet.Security.OAuth.Validation;
 using Backend.Extensions;
 using Backend.Models;
@@ -80,9 +78,10 @@ namespace Backend {
             app.UseOpenIdConnectServer(options => {
                 options.Provider = new AuthorizationProvider();
 
-                // Enable the authorization and logout endpoints.
+                // Enable the authorization, logout and token endpoints.
                 options.AuthorizationEndpointPath = "/connect/authorize";
                 options.LogoutEndpointPath = "/connect/logout";
+                options.TokenEndpointPath = "/connect/token";
 
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.

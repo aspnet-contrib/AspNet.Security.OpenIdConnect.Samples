@@ -22,7 +22,7 @@ namespace Mvc.Server.Controllers {
         public AuthorizationController(ApplicationContext database) {
             this.database = database;
         }
-        
+
         [Authorize, HttpGet("~/connect/authorize")]
         public async Task<IActionResult> Authorize(CancellationToken cancellationToken) {
             // Note: when a fatal error occurs during the request processing, an OpenID Connect response
