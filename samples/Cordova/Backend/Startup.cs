@@ -109,7 +109,7 @@ namespace Backend {
                 options.AllowInsecureHttp = true;
 
                 // Note: to override the default access token format and use JWT, assign AccessTokenHandler:
-                //options.AccessTokenHandler = new JwtSecurityTokenHandler();
+                // options.AccessTokenHandler = new JwtSecurityTokenHandler();
             });
 
             app.UseStaticFiles();

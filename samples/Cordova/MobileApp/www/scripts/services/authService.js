@@ -9,14 +9,14 @@ app.factory('authService', ['$http', '$q', 'localStorageService', 'utilitiesServ
     };
 
     var _logIn = function () {
-        var deferred = $q.defer()
+        var deferred = $q.defer();
         var ref = window.open(authConfig.logInApi + '?client_id=' + authConfig.clientId + '&redirect_uri=' + authConfig.redirect_uri + '&response_type=code&scope=openid', '_blank', 'location=no');
         ref.addEventListener('loadstart', function (event) {
             if (utilitiesService.startsWith(event.url, authConfig.redirect_uri)) {
                 var authorizationCode = utilitiesService.getURLParameter(event.url, "code");
                 $http.post(authConfig.tokenApi,
                     'grant_type=authorization_code&code=' + authorizationCode + '&client_id=' + authConfig.clientId + '&redirect_uri=' + authConfig.redirect_uri,
-                      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function successCallback(response) {
+                    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function successCallback(response) {
                     var requestToken = response.data.access_token;
                     var idToken = response.data.id_token;
                     var userName = jwtHelper.decodeToken(idToken).unique_name;
@@ -24,13 +24,13 @@ app.factory('authService', ['$http', '$q', 'localStorageService', 'utilitiesServ
                 _fillAuthData();
                 deferred.resolve(ref.close());
                 });
-            };
+            }
         });
         return deferred.promise;
     };
 
     var _logOut = function () {
-        var deferred = $q.defer()
+        var deferred = $q.defer();
         var ref = window.open(authConfig.logOutApi + '?post_logout_redirect_uri=' + authConfig.post_logout_redirect_uri, '_blank', 'location=no');
         ref.addEventListener('loadstart', function (event) {
             if (utilitiesService.startsWith(event.url, authConfig.post_logout_redirect_uri)) {
@@ -38,7 +38,7 @@ app.factory('authService', ['$http', '$q', 'localStorageService', 'utilitiesServ
                 _authentication.isAuth = false;
                 _authentication.userName = "";
                 deferred.resolve(ref.close());
-            };
+            }
         });
         return deferred.promise;
     };
