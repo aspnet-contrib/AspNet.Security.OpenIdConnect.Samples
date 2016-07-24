@@ -98,7 +98,7 @@ namespace Postman.Providers {
             // OpenID Connect server middleware handle the other grant types.
             if (context.Request.IsPasswordGrantType()) {
                 // Using password derivation and a time-constant comparer is STRONGLY recommended.
-                if (!string.Equals(context.Request.Username, "Bob", StringComparison.Ordinal) &&
+                if (!string.Equals(context.Request.Username, "Bob", StringComparison.Ordinal) ||
                     !string.Equals(context.Request.Password, "P@ssw0rd", StringComparison.Ordinal)) {
                     context.Reject(
                         error: OpenIdConnectConstants.Errors.InvalidGrant,
