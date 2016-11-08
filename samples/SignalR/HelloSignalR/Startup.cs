@@ -36,7 +36,7 @@ namespace HelloSignalR {
 
             // Add a new middleware issuing access tokens.
             app.UseOpenIdConnectServer(options => {
-                options.Provider = new AuthenticationProvider();
+                options.Provider = new AuthorizationProvider();
 
                 // Enable the token endpoint.
                 options.TokenEndpointPath = "/connect/token";

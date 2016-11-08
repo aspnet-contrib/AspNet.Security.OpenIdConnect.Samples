@@ -5,7 +5,7 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
 
 namespace HelloSignalR.Providers {
-    public class AuthenticationProvider : OpenIdConnectServerProvider {
+    public class AuthorizationProvider : OpenIdConnectServerProvider {
         public override Task ValidateTokenRequest(ValidateTokenRequestContext context) {
             // Reject token requests that don't use grant_type=password or grant_type=refresh_token.
             if (!context.Request.IsPasswordGrantType() && !context.Request.IsRefreshTokenGrantType()) {

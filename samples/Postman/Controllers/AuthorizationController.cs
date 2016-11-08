@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Postman.Helpers;
 
 namespace Postman.Controllers {
     public class AuthorizationController : Controller {
         [HttpGet("~/connect/authorize")]
-        [HttpPost("~/connect/authorize")]
         public IActionResult Authorize() {
             // Extract the authorization request from the ASP.NET environment.
             var request = HttpContext.GetOpenIdConnectRequest();
@@ -20,8 +20,9 @@ namespace Postman.Controllers {
             // Note: in a real world application, you'd probably prefer creating a specific view model.
             return View("Authorize", request);
         }
-        
-        [HttpPost("~/connect/authorize/accept")]
+
+        [FormValueRequired("submit.Accept")]
+        [HttpPost("~/connect/authorize")]
         [ValidateAntiForgeryToken]
         public IActionResult Accept() {
             var request = HttpContext.GetOpenIdConnectRequest();
@@ -60,8 +61,8 @@ namespace Postman.Controllers {
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
-        [Authorize]
-        [HttpPost("~/connect/authorize/deny")]
+        [FormValueRequired("submit.Deny")]
+        [HttpPost("~/connect/authorize")]
         [ValidateAntiForgeryToken]
         public IActionResult Deny() {
             // Notify ASOS that the authorization grant has been denied by the resource owner.

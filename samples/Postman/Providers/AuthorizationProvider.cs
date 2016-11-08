@@ -9,18 +9,6 @@ using Microsoft.AspNetCore.Http.Authentication;
 
 namespace Postman.Providers {
     public sealed class AuthorizationProvider : OpenIdConnectServerProvider {
-        public override Task MatchEndpoint(MatchEndpointContext context) {
-            // Note: by default, OpenIdConnectServerHandler only handles authorization requests made to the authorization endpoint.
-            // This context handler uses a more relaxed policy that allows extracting authorization requests received at
-            // /connect/authorize/accept and /connect/authorize/deny (see AuthorizationController.cs for more information).
-            if (context.Options.AuthorizationEndpointPath.HasValue &&
-                context.Request.Path.StartsWithSegments(context.Options.AuthorizationEndpointPath)) {
-                context.MatchesAuthorizationEndpoint();
-            }
-
-            return Task.FromResult(0);
-        }
-
         public override Task ValidateAuthorizationRequest(ValidateAuthorizationRequestContext context) {
             // Note: the OpenID Connect server middleware supports the authorization code, implicit and hybrid flows
             // but this authorization provider only accepts response_type=code authorization/authentication requests.

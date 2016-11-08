@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Backend.Models;
+using Backend.Helpers;
 
 namespace Backend.Controllers {
     public class AuthorizationController : Controller {
@@ -22,7 +23,7 @@ namespace Backend.Controllers {
             this.database = database;
         }
         
-        [Authorize, HttpGet("~/connect/authorize"), HttpPost("~/connect/authorize")]
+        [Authorize, HttpGet("~/connect/authorize")]
         public async Task<IActionResult> Authorize(CancellationToken cancellationToken) {
             // Note: when a fatal error occurs during the request processing, an OpenID Connect response
             // is prematurely forged and added to the ASP.NET context by OpenIdConnectServerHandler.
@@ -58,7 +59,8 @@ namespace Backend.Controllers {
             return View("Authorize", Tuple.Create(request, application));
         }
 
-        [Authorize, HttpPost("~/connect/authorize/accept"), ValidateAntiForgeryToken]
+        [Authorize, FormValueRequired("submit.Accept")]
+        [HttpPost("~/connect/authorize"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Accept(CancellationToken cancellationToken) {
             var response = HttpContext.GetOpenIdConnectResponse();
             if (response != null) {
@@ -136,7 +138,8 @@ namespace Backend.Controllers {
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
-        [Authorize, HttpPost("~/connect/authorize/deny"), ValidateAntiForgeryToken]
+        [Authorize, FormValueRequired("submit.Deny")]
+        [HttpPost("~/connect/authorize"), ValidateAntiForgeryToken]
         public IActionResult Deny(CancellationToken cancellationToken) {
             var response = HttpContext.GetOpenIdConnectResponse();
             if (response != null) {
