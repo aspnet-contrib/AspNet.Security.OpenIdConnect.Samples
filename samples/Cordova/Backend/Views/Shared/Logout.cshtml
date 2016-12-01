@@ -1,4 +1,10 @@
-﻿<div class="jumbotron">
+﻿@using AspNet.Security.OpenIdConnect.Primitives
+@using Backend.Models
+@using System.Security.Claims
+
+@model Tuple<OpenIdConnectRequest, ClaimsPrincipal>
+
+<div class="jumbotron">
     <h1>Log out</h1>
     <p class="lead text-left">Are you sure you want to sign out?</p>
 
@@ -10,7 +16,7 @@
         @Html.AntiForgeryToken()
 
         @* Flow the logout request *@
-        @foreach (var parameter in Model.Item1.Parameters) {
+        @foreach (var parameter in Model.Item1.GetParameters()) {
             <input type="hidden" name="@parameter.Key" value="@parameter.Value" />
         }
 

@@ -18,9 +18,9 @@
   },
 
   "dependencies": {
-    "AspNet.Security.OAuth.Introspection": "1.0.0-alpha2-*",
-    "AspNet.Security.OAuth.Validation": "1.0.0-alpha2-*",
-    "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta6-final",
+    "AspNet.Security.OAuth.Introspection": "1.0.0-alpha3-final",
+    "AspNet.Security.OAuth.Validation": "1.0.0-alpha3-final",
+    "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta7-final",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.AspNetCore.Authentication.Google": "1.0.0",
     "Microsoft.AspNetCore.Authentication.Twitter": "1.0.0",

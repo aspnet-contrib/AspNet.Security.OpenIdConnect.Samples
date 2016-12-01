@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
+using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Mvc.Server.Helpers;
 using Mvc.Server.Models;
 
@@ -37,7 +37,7 @@ namespace Mvc.Server.Controllers {
             // Extract the authorization request from the ASP.NET environment.
             var request = HttpContext.GetOpenIdConnectRequest();
             if (request == null) {
-                return View("Error", new OpenIdConnectMessage {
+                return View("Error", new OpenIdConnectResponse {
                     Error = OpenIdConnectConstants.Errors.ServerError,
                     ErrorDescription = "An internal error has occurred"
                 });
@@ -49,7 +49,7 @@ namespace Mvc.Server.Controllers {
             // manually removed the application details from the database after the initial check made by ASOS.
             var application = await GetApplicationAsync(request.ClientId, cancellationToken);
             if (application == null) {
-                return View("Error", new OpenIdConnectMessage {
+                return View("Error", new OpenIdConnectResponse {
                     Error = OpenIdConnectConstants.Errors.InvalidClient,
                     ErrorDescription = "Details concerning the calling client application cannot be found in the database"
                 });
@@ -69,7 +69,7 @@ namespace Mvc.Server.Controllers {
 
             var request = HttpContext.GetOpenIdConnectRequest();
             if (request == null) {
-                return View("Error", new OpenIdConnectMessage {
+                return View("Error", new OpenIdConnectResponse {
                     Error = OpenIdConnectConstants.Errors.ServerError,
                     ErrorDescription = "An internal error has occurred"
                 });
@@ -96,21 +96,11 @@ namespace Mvc.Server.Controllers {
 
             var application = await GetApplicationAsync(request.ClientId, cancellationToken);
             if (application == null) {
-                return View("Error", new OpenIdConnectMessage {
+                return View("Error", new OpenIdConnectResponse {
                     Error = OpenIdConnectConstants.Errors.InvalidClient,
                     ErrorDescription = "Details concerning the calling client application cannot be found in the database"
                 });
             }
-
-            // Create a new ClaimsIdentity containing the claims associated with the application.
-            // Note: setting identity.Actor is not mandatory but can be useful to access
-            // the whole delegation chain from the resource server (see ResourceController.cs).
-            identity.Actor = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
-            identity.Actor.AddClaim(ClaimTypes.NameIdentifier, application.ApplicationID);
-
-            identity.Actor.AddClaim(ClaimTypes.Name, application.DisplayName,
-                OpenIdConnectConstants.Destinations.AccessToken,
-                OpenIdConnectConstants.Destinations.IdentityToken);
 
             // Create a new authentication ticket holding the user identity.
             var ticket = new AuthenticationTicket(
@@ -148,7 +138,7 @@ namespace Mvc.Server.Controllers {
 
             var request = HttpContext.GetOpenIdConnectRequest();
             if (request == null) {
-                return View("Error", new OpenIdConnectMessage {
+                return View("Error", new OpenIdConnectResponse {
                     Error = OpenIdConnectConstants.Errors.ServerError,
                     ErrorDescription = "An internal error has occurred"
                 });
@@ -174,7 +164,7 @@ namespace Mvc.Server.Controllers {
 
             var request = HttpContext.GetOpenIdConnectRequest();
             if (request == null) {
-                return View("Error", new OpenIdConnectMessage {
+                return View("Error", new OpenIdConnectResponse {
                     Error = OpenIdConnectConstants.Errors.ServerError,
                     ErrorDescription = "An internal error has occurred"
                 });

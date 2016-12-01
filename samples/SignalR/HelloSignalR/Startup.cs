@@ -41,6 +41,17 @@ namespace HelloSignalR {
                 // Enable the token endpoint.
                 options.TokenEndpointPath = "/connect/token";
                 options.AllowInsecureHttp = true;
+
+                // Register a new ephemeral key, that is discarded when the application
+                // shuts down. Tokens signed using this key are automatically invalidated.
+                // This method should only be used during development.
+                options.SigningCredentials.AddEphemeralKey();
+
+                // On production, using a X.509 certificate stored in the machine store is recommended.
+                // You can generate a self-signed certificate using Pluralsight's self-cert utility:
+                // https://s3.amazonaws.com/pluralsight-free/keith-brown/samples/SelfCert.zip
+                //
+                // options.SigningCredentials.AddCertificate("7D2A741FE34CC2C7369237A5F2078988E17A6A75");
             });
         }
     }
