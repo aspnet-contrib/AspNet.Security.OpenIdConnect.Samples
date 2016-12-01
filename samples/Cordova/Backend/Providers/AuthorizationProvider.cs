@@ -11,11 +11,13 @@ namespace Backend.Providers {
     public sealed class AuthorizationProvider : OpenIdConnectServerProvider {
         public override async Task ValidateAuthorizationRequest(ValidateAuthorizationRequestContext context) {
             // Note: the OpenID Connect server middleware supports the authorization code, implicit and hybrid flows
-            // but this authorization provider only accepts response_type=token authorization/authentication requests.
-            if (!context.Request.IsImplicitFlow()) {
+            // but this authorization provider only accepts response_type=code authorization/authentication requests.
+            // You may consider relaxing it to support the implicit or hybrid flows. In this case, consider adding
+            // checks rejecting implicit/hybrid authorization requests when the client is a confidential application.
+            if (!context.Request.IsAuthorizationCodeFlow()) {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.UnsupportedResponseType,
-                    description: "Only the implicit flow is supported by this authorization server.");
+                    description: "Only the authorization code flow is supported by this authorization server");
 
                 return;
             }
@@ -58,6 +60,27 @@ namespace Backend.Providers {
             }
 
             context.Validate(application.RedirectUri);
+        }
+
+        public override Task ValidateTokenRequest(ValidateTokenRequestContext context)
+        {
+            // Note: the OpenID Connect server middleware supports authorization code, refresh token, client credentials
+            // and resource owner password credentials grant types but this authorization provider uses a safer policy
+            // rejecting the last two ones. You may consider relaxing it to support the ROPC or client credentials grant types.
+            if (!context.Request.IsAuthorizationCodeGrantType() && !context.Request.IsRefreshTokenGrantType())
+            {
+                context.Reject(
+                    error: OpenIdConnectConstants.Errors.UnsupportedGrantType,
+                    description: "Only authorization code and refresh token grant types " +
+                                 "are accepted by this authorization server");
+
+                return Task.FromResult(0);
+            }
+
+            // Note: we use a relaxed policy here as the client credentials cannot be safely stored in the Cordova Javascript application.
+            // In this case, we call context.Skip() to inform the server middleware the client is not trusted.
+            context.Skip();
+            return Task.FromResult(0);            
         }
 
         public override async Task ValidateLogoutRequest(ValidateLogoutRequestContext context) {

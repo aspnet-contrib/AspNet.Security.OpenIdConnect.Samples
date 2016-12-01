@@ -104,7 +104,8 @@
   <platform name="wp8">
     <splash src="res/screens/wp8/SplashScreenImage.jpg" width="480" height="800" />
   </platform>
-  <vs:plugin name="cordova-plugin-inappbrowser" version="1.1.1" />
   <vs:plugin name="cordova-plugin-whitelist" version="1.2.0" />
   <access origin="localhost:54540" />
+  <plugin name="cordova-plugin-inappbrowser" version="1.1.1" />
+  <access origin="127.0.0.1:80" />
 </widget>

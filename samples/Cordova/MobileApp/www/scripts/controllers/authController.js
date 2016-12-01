@@ -5,7 +5,7 @@ app.controller('authController', ['$sce', '$scope', '$location', 'authService', 
 
     $scope.logIn = function () {
         authService.logIn().then(function (response) {
-            authService.confirmMessage().then(function (response) { $scope.message = response });
+            authService.confirmMessage().then(function (response) { $scope.message = response; });
         }, function (err) {
             $scope.message = err;
         });
@@ -20,7 +20,7 @@ app.controller('authController', ['$sce', '$scope', '$location', 'authService', 
     };
 
     $scope.queryServer = function () {
-        authService.confirmMessage().then(function (response) { $scope.message = response });
+        authService.confirmMessage().then(function (response) { $scope.message = response; });
     };
 
     $scope.authentication = authService.authentication;

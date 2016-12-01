@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using AspNet.Security.OAuth.Validation;
-using Backend.Extensions;
-using Backend.Models;
-using Backend.Providers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Backend.Extensions;
+using Backend.Models;
+using Backend.Providers;
 
 namespace Backend {
     public class Startup {
@@ -80,9 +80,11 @@ namespace Backend {
             app.UseOpenIdConnectServer(options => {
                 options.Provider = new AuthorizationProvider();
 
-                // Enable the authorization and logout endpoints.
+                // Enable the authorization, logout, token and userinfo endpoints.
                 options.AuthorizationEndpointPath = "/connect/authorize";
                 options.LogoutEndpointPath = "/connect/logout";
+                options.TokenEndpointPath = "/connect/token";
+                //options.UserinfoEndpointPath = "/connect/userinfo";
 
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.
