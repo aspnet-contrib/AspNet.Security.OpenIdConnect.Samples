@@ -1,5 +1,7 @@
-﻿namespace Backend.Models {
-    public class Application {
+﻿namespace Backend.Models
+{
+    public class Application
+    {
         public string ApplicationID { get; set; }
         public string DisplayName { get; set; }
         public string RedirectUri { get; set; }

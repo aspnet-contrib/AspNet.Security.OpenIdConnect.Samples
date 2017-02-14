@@ -2,15 +2,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Postman.Providers;
 
-namespace Postman {
-    public class Startup {
-        public void ConfigureServices(IServiceCollection services) {
+namespace Postman
+{
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app) {
+        public void Configure(IApplicationBuilder app)
+        {
             // To test this sample with Postman, use the following settings:
-            // 
+            //
             // * Authorization URL: http://localhost:6500/connect/authorize
             // * Access token URL: http://localhost:6500/connect/token
             // * Client ID: postman
@@ -25,7 +29,8 @@ namespace Postman {
 
             app.UseOAuthValidation();
 
-            app.UseOpenIdConnectServer(options => {
+            app.UseOpenIdConnectServer(options =>
+            {
                 options.Provider = new AuthorizationProvider();
 
                 // Enable the authorization and token endpoints.

@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace HelloSignalR.Connections {
-    public class SimpleConnection : PersistentConnection {
-        protected override async Task OnConnected(HttpRequest request, string connectionId) {
+namespace HelloSignalR.Connections
+{
+    public class SimpleConnection : PersistentConnection
+    {
+        protected override async Task OnConnected(HttpRequest request, string connectionId)
+        {
             var identity = request.HttpContext.User.Identity;
             var status = identity.IsAuthenticated ? "Authenticated" : "Unauthenticated";
 
@@ -13,12 +16,14 @@ namespace HelloSignalR.Connections {
 
             await Connection.Send(connectionId, $"Connection is {status}");
 
-            if (identity.IsAuthenticated) {
+            if (identity.IsAuthenticated)
+            {
                 await Connection.Send(connectionId, $"Authenticated username: {identity.Name}");
             }
         }
 
-        protected override async Task OnReceived(HttpRequest request, string connectionId, string data) {
+        protected override async Task OnReceived(HttpRequest request, string connectionId, string data)
+        {
             var identity = request.HttpContext.User.Identity;
             var status = identity.IsAuthenticated ? "authenticated" : "unauthenticated";
             var name = identity.IsAuthenticated ? identity.Name : "client";

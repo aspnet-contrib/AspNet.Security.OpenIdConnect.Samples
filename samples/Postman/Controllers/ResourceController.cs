@@ -2,13 +2,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Postman.Controllers {
+namespace Postman.Controllers
+{
     [Route("api")]
-    public class ResourceController : Controller {
+    public class ResourceController : Controller
+    {
         [Authorize, HttpGet, Route("message")]
-        public IActionResult GetMessage() {
+        public IActionResult GetMessage()
+        {
             var identity = User.Identity as ClaimsIdentity;
-            if (identity == null) {
+            if (identity == null)
+            {
                 return BadRequest();
             }
 

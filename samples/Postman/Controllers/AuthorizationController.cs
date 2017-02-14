@@ -10,10 +10,13 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Postman.Helpers;
 
-namespace Postman.Controllers {
-    public class AuthorizationController : Controller {
+namespace Postman.Controllers
+{
+    public class AuthorizationController : Controller
+    {
         [HttpGet("~/connect/authorize")]
-        public IActionResult Authorize() {
+        public IActionResult Authorize()
+        {
             // Extract the authorization request from the ASP.NET environment.
             var request = HttpContext.GetOpenIdConnectRequest();
 
@@ -24,7 +27,8 @@ namespace Postman.Controllers {
         [FormValueRequired("submit.Accept")]
         [HttpPost("~/connect/authorize")]
         [ValidateAntiForgeryToken]
-        public IActionResult Accept() {
+        public IActionResult Accept()
+        {
             var request = HttpContext.GetOpenIdConnectRequest();
 
             // Create a new ClaimsIdentity containing the claims that
@@ -64,7 +68,8 @@ namespace Postman.Controllers {
         [FormValueRequired("submit.Deny")]
         [HttpPost("~/connect/authorize")]
         [ValidateAntiForgeryToken]
-        public IActionResult Deny() {
+        public IActionResult Deny()
+        {
             // Notify ASOS that the authorization grant has been denied by the resource owner.
             // Note: OpenIdConnectServerHandler will automatically take care of redirecting
             // the user agent to the client application using the appropriate response_mode.

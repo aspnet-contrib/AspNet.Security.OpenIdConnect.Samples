@@ -5,11 +5,15 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
 
-namespace HelloSignalR.Providers {
-    public class AuthorizationProvider : OpenIdConnectServerProvider {
-        public override Task ValidateTokenRequest(ValidateTokenRequestContext context) {
+namespace HelloSignalR.Providers
+{
+    public class AuthorizationProvider : OpenIdConnectServerProvider
+    {
+        public override Task ValidateTokenRequest(ValidateTokenRequestContext context)
+        {
             // Reject token requests that don't use grant_type=password or grant_type=refresh_token.
-            if (!context.Request.IsPasswordGrantType() && !context.Request.IsRefreshTokenGrantType()) {
+            if (!context.Request.IsPasswordGrantType() && !context.Request.IsRefreshTokenGrantType())
+            {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.UnsupportedGrantType,
                     description: "Only grant_type=password and refresh_token " +
@@ -18,13 +22,15 @@ namespace HelloSignalR.Providers {
                 return Task.FromResult(0);
             }
 
-            if (string.Equals(context.ClientId, "AspNetContribSample", StringComparison.Ordinal)) {
+            if (string.Equals(context.ClientId, "AspNetContribSample", StringComparison.Ordinal))
+            {
                 // Note: the context is marked as skipped instead of validated because the client
                 // is not trusted (JavaScript applications cannot keep their credentials secret).
                 context.Skip();
             }
 
-            else {
+            else
+            {
                 // If the client_id doesn't correspond to the
                 // intended identifier, reject the request.
                 context.Reject(OpenIdConnectConstants.Errors.InvalidClient);
@@ -33,14 +39,17 @@ namespace HelloSignalR.Providers {
             return Task.FromResult(0);
         }
 
-        public override Task HandleTokenRequest(HandleTokenRequestContext context) {
+        public override Task HandleTokenRequest(HandleTokenRequestContext context)
+        {
             // Only handle grant_type=password token requests and let the
             // OpenID Connect server middleware handle the other grant types.
-            if (context.Request.IsPasswordGrantType()) {
+            if (context.Request.IsPasswordGrantType())
+            {
                 var user = new { Id = "users-123", UserName = "AspNet", Password = "contrib" };
 
                 if (!string.Equals(context.Request.Username, user.UserName, StringComparison.Ordinal) ||
-                    !string.Equals(context.Request.Password, user.Password, StringComparison.Ordinal)) {
+                    !string.Equals(context.Request.Password, user.Password, StringComparison.Ordinal))
+                {
                     context.Reject(
                         error: OpenIdConnectConstants.Errors.InvalidGrant,
                         description: "Invalid username or password.");

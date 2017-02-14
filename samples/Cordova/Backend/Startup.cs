@@ -10,28 +10,36 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backend {
-    public class Startup {
-        public void ConfigureServices(IServiceCollection services) {
+namespace Backend
+{
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.AddEntityFramework()
                 .AddEntityFrameworkInMemoryDatabase()
-                .AddDbContext<ApplicationContext>(options => {
+                .AddDbContext<ApplicationContext>(options =>
+                {
                     options.UseInMemoryDatabase();
                 });
 
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+            {
                 options.SignInScheme = "ServerCookie";
             });
 
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app) {
+        public void Configure(IApplicationBuilder app)
+        {
             app.UseDeveloperExceptionPage();
 
             // Create a new branch where the registered middleware will be executed only for API calls.
-            app.UseWhen(context => context.Request.Path.StartsWithSegments(new PathString("/api")), branch => {
-                branch.UseOAuthValidation(new OAuthValidationOptions {
+            app.UseWhen(context => context.Request.Path.StartsWithSegments(new PathString("/api")), branch =>
+            {
+                branch.UseOAuthValidation(new OAuthValidationOptions
+                {
                     AutomaticAuthenticate = true,
                     AutomaticChallenge = true
                 });
@@ -39,8 +47,9 @@ namespace Backend {
                 // Alternatively, you can also use the introspection middleware.
                 // Using it is recommended if your resource server is in a
                 // different application/separated from the authorization server.
-                // 
-                // branch.UseOAuthIntrospection(new OAuthIntrospectionOptions {
+                //
+                // branch.UseOAuthIntrospection(new OAuthIntrospectionOptions
+                // {
                 //     AutomaticAuthenticate = true,
                 //     AutomaticChallenge = true,
                 //     Authority = "http://localhost:54540/",
@@ -51,10 +60,12 @@ namespace Backend {
             });
 
             // Create a new branch where the registered middleware will be executed only for non API calls.
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments(new PathString("/api")), branch => {
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments(new PathString("/api")), branch =>
+            {
                 // Insert a new cookies middleware in the pipeline to store
                 // the user identity returned by the external identity provider.
-                branch.UseCookieAuthentication(new CookieAuthenticationOptions {
+                branch.UseCookieAuthentication(new CookieAuthenticationOptions
+                {
                     AutomaticAuthenticate = true,
                     AutomaticChallenge = true,
                     AuthenticationScheme = "ServerCookie",
@@ -64,18 +75,21 @@ namespace Backend {
                     LogoutPath = new PathString("/signout")
                 });
 
-                branch.UseGoogleAuthentication(new GoogleOptions {
+                branch.UseGoogleAuthentication(new GoogleOptions
+                {
                     ClientId = "560027070069-37ldt4kfuohhu3m495hk2j4pjp92d382.apps.googleusercontent.com",
                     ClientSecret = "n2Q-GEw9RQjzcRbU3qhfTj8f"
                 });
 
-                branch.UseTwitterAuthentication(new TwitterOptions {
+                branch.UseTwitterAuthentication(new TwitterOptions
+                {
                     ConsumerKey = "6XaCTaLbMqfj6ww3zvZ5g",
                     ConsumerSecret = "Il2eFzGIrYhz6BWjYhVXBPQSfZuS4xoHpSSyD9PI"
                 });
             });
 
-            app.UseOpenIdConnectServer(options => {
+            app.UseOpenIdConnectServer(options =>
+            {
                 options.Provider = new AuthorizationProvider();
 
                 // Enable the authorization, logout and token endpoints.
@@ -118,17 +132,20 @@ namespace Backend {
             app.UseWelcomePage();
 
             using (var context = new ApplicationContext(
-                app.ApplicationServices.GetRequiredService<DbContextOptions<ApplicationContext>>())) {
+                app.ApplicationServices.GetRequiredService<DbContextOptions<ApplicationContext>>()))
+            {
                 // Note: when using the introspection middleware, your resource server
                 // MUST be registered as an OAuth2 client and have valid credentials.
-                // 
-                // database.Applications.Add(new Application {
+                //
+                // database.Applications.Add(new Application
+                // {
                 //     ApplicationID = "resource_server",
                 //     DisplayName = "Main resource server",
                 //     Secret = "875sqd4s5d748z78z7ds1ff8zz8814ff88ed8ea4z4zzd"
                 // });
 
-                context.Applications.Add(new Application {
+                context.Applications.Add(new Application
+                {
                     ApplicationID = "myClient",
                     DisplayName = "My client application",
                     RedirectUri = "http://localhost/callback",
