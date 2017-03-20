@@ -1,0 +1,12 @@
+<Project>
+
+  <PropertyGroup>
+    <AspNetCoreVersion>1.0.0</AspNetCoreVersion>
+    <AspNetContribOpenIdExtensionsVersion>1.0.0-alpha3-final</AspNetContribOpenIdExtensionsVersion>
+    <AspNetContribOpenIdServerVersion>1.0.0-beta7-final</AspNetContribOpenIdServerVersion>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <RuntimeFrameworkVersion>1.0.0</RuntimeFrameworkVersion>
+    <SignalRVersion>0.1.0-*</SignalRVersion>
+  </PropertyGroup>
+
+</Project>
