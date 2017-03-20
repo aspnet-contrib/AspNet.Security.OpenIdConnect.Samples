@@ -1,7 +1,7 @@
 AspNet.Security.OpenIdConnect.Samples
 =====================================
 
-ASP.NET Core samples demonstrating how to use the [ASP.NET OpenID Connect server](https://github.com/aspnet-contrib/AspNet.Security.OpenIdConnect.Server) with MVC or JS apps.
+ASP.NET Core samples demonstrating how to use the [ASP.NET OpenID Connect server](https://github.com/aspnet-contrib/AspNet.Security.OpenIdConnect.Server) with MVC or JS apps. Present samples target ASP.NET Core RC1; see [AspNet.Security.OpenIdConnect.Server/samples](https://github.com/aspnet-contrib/AspNet.Security.OpenIdConnect.Server/tree/dev/samples) instead for samples targeting latest releases (RC2, RC3).
 
 Note: the samples hosted on this repository target ASP.NET Core 1.0 RTM ; see [AspNet.Security.OpenIdConnect.Server/samples](https://github.com/aspnet-contrib/AspNet.Security.OpenIdConnect.Server/tree/dev/samples) for samples targeting the latest pre-release versions.
 
