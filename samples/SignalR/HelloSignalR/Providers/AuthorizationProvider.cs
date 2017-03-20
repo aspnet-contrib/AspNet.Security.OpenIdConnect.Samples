@@ -57,13 +57,16 @@ namespace HelloSignalR.Providers
                     return Task.FromResult(0);
                 }
 
-                var identity = new ClaimsIdentity(context.Options.AuthenticationScheme);
+                var identity = new ClaimsIdentity(
+                    context.Options.AuthenticationScheme,
+                    OpenIdConnectConstants.Claims.Name,
+                    OpenIdConnectConstants.Claims.Role);
 
-                identity.AddClaim(ClaimTypes.NameIdentifier, user.Id,
+                identity.AddClaim(OpenIdConnectConstants.Claims.Subject, user.Id,
                     OpenIdConnectConstants.Destinations.AccessToken,
                     OpenIdConnectConstants.Destinations.IdentityToken);
 
-                identity.AddClaim(ClaimTypes.Name, user.UserName,
+                identity.AddClaim(OpenIdConnectConstants.Claims.Name, user.UserName,
                     OpenIdConnectConstants.Destinations.AccessToken,
                     OpenIdConnectConstants.Destinations.IdentityToken);
 

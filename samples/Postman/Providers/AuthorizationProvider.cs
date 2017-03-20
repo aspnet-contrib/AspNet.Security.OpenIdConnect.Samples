@@ -110,13 +110,16 @@ namespace Postman.Providers
 
                 // Create a new ClaimsIdentity containing the claims that
                 // will be used to create an id_token and/or an access token.
-                var identity = new ClaimsIdentity(OpenIdConnectServerDefaults.AuthenticationScheme);
+                var identity = new ClaimsIdentity(
+                    OpenIdConnectServerDefaults.AuthenticationScheme,
+                    OpenIdConnectConstants.Claims.Name,
+                    OpenIdConnectConstants.Claims.Role);
 
-                identity.AddClaim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString(),
+                identity.AddClaim(OpenIdConnectConstants.Claims.Subject, Guid.NewGuid().ToString(),
                     OpenIdConnectConstants.Destinations.AccessToken,
                     OpenIdConnectConstants.Destinations.IdentityToken);
 
-                identity.AddClaim(ClaimTypes.Name, "Bob le Bricoleur",
+                identity.AddClaim(OpenIdConnectConstants.Claims.Name, "Bob le Bricoleur",
                     OpenIdConnectConstants.Destinations.AccessToken,
                     OpenIdConnectConstants.Destinations.IdentityToken);
 

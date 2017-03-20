@@ -97,11 +97,27 @@ namespace Backend
                 options.LogoutEndpointPath = "/connect/logout";
                 options.TokenEndpointPath = "/connect/token";
 
-                // Register a new ephemeral key, that is discarded when the application
-                // shuts down. Tokens signed using this key are automatically invalidated.
-                // This method should only be used during development.
-                options.SigningCredentials.AddEphemeralKey();
+                // Note: see AuthorizationController.cs for more
+                // information concerning ApplicationCanDisplayErrors.
+                options.ApplicationCanDisplayErrors = true;
+                options.AllowInsecureHttp = true;
 
+                // Note: to override the default access token format and use JWT, assign AccessTokenHandler:
+                //
+                // options.AccessTokenHandler = new JwtSecurityTokenHandler
+                // {
+                //     InboundClaimTypeMap = new Dictionary<string, string>(),
+                //     OutboundClaimTypeMap = new Dictionary<string, string>()
+                // };
+                //
+                // Note: when using JWT as the access token format, you have to register a signing key.
+                //
+                // You can register a new ephemeral key, that is discarded when the application shuts down.
+                // Tokens signed using this key are automatically invalidated and thus this method
+                // should only be used during development:
+                //
+                // options.SigningCredentials.AddEphemeralKey();
+                //
                 // On production, using a X.509 certificate stored in the machine store is recommended.
                 // You can generate a self-signed certificate using Pluralsight's self-cert utility:
                 // https://s3.amazonaws.com/pluralsight-free/keith-brown/samples/SelfCert.zip
@@ -115,14 +131,6 @@ namespace Backend
                 //     assembly: typeof(Startup).GetTypeInfo().Assembly,
                 //     resource: "Backend.Certificate.pfx",
                 //     password: "Owin.Security.OpenIdConnect.Server");
-
-                // Note: see AuthorizationController.cs for more
-                // information concerning ApplicationCanDisplayErrors.
-                options.ApplicationCanDisplayErrors = true;
-                options.AllowInsecureHttp = true;
-
-                // Note: to override the default access token format and use JWT, assign AccessTokenHandler:
-                // options.AccessTokenHandler = new JwtSecurityTokenHandler();
             });
 
             app.UseStaticFiles();

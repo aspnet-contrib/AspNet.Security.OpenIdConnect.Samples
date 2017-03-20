@@ -38,11 +38,22 @@ namespace Postman
                 options.TokenEndpointPath = "/connect/token";
                 options.AllowInsecureHttp = true;
 
-                // Register a new ephemeral key, that is discarded when the application
-                // shuts down. Tokens signed using this key are automatically invalidated.
-                // This method should only be used during development.
-                options.SigningCredentials.AddEphemeralKey();
-
+                // Note: to override the default access token format and use JWT, assign AccessTokenHandler:
+                //
+                // options.AccessTokenHandler = new JwtSecurityTokenHandler
+                // {
+                //     InboundClaimTypeMap = new Dictionary<string, string>(),
+                //     OutboundClaimTypeMap = new Dictionary<string, string>()
+                // };
+                //
+                // Note: when using JWT as the access token format, you have to register a signing key.
+                //
+                // You can register a new ephemeral key, that is discarded when the application shuts down.
+                // Tokens signed using this key are automatically invalidated and thus this method
+                // should only be used during development:
+                //
+                // options.SigningCredentials.AddEphemeralKey();
+                //
                 // On production, using a X.509 certificate stored in the machine store is recommended.
                 // You can generate a self-signed certificate using Pluralsight's self-cert utility:
                 // https://s3.amazonaws.com/pluralsight-free/keith-brown/samples/SelfCert.zip
