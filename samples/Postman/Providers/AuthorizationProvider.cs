@@ -36,7 +36,7 @@ namespace Postman.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidRequest,
-                    description: "The specified response_mode is unsupported.");
+                    description: "The specified 'response_mode' is unsupported.");
 
                 return Task.FromResult(0);
             }
@@ -46,7 +46,7 @@ namespace Postman.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidClient,
-                    description: "The specified client_id is unknown.");
+                    description: "The specified client identifier is invalid.");
 
                 return Task.FromResult(0);
             }
@@ -56,7 +56,7 @@ namespace Postman.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidClient,
-                    description: "The specified redirect_uri is invalid.");
+                    description: "The specified 'redirect_uri' is invalid.");
 
                 return Task.FromResult(0);
             }
@@ -103,7 +103,7 @@ namespace Postman.Providers
                 {
                     context.Reject(
                         error: OpenIdConnectConstants.Errors.InvalidGrant,
-                        description: "Invalid user credentials.");
+                        description: "The specified user credentials are invalid.");
 
                     return Task.FromResult(0);
                 }

@@ -52,7 +52,7 @@ namespace HelloSignalR.Providers
                 {
                     context.Reject(
                         error: OpenIdConnectConstants.Errors.InvalidGrant,
-                        description: "Invalid username or password.");
+                        description: "The specified user credentials are invalid.");
 
                     return Task.FromResult(0);
                 }

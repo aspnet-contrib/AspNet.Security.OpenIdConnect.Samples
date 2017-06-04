@@ -35,7 +35,7 @@ namespace Backend.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidRequest,
-                    description: "The specified response_mode is unsupported.");
+                    description: "The specified 'response_mode' is unsupported.");
 
                 return;
             }
@@ -51,7 +51,7 @@ namespace Backend.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidClient,
-                    description: "Application not found in the database: ensure that your client_id is correct.");
+                    description: "The specified client identifier is invalid.");
 
                 return;
             }
@@ -61,7 +61,7 @@ namespace Backend.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidClient,
-                    description: "Invalid redirect_uri.");
+                    description: "The specified 'redirect_uri' is invalid.");
 
                 return;
             }
@@ -89,7 +89,7 @@ namespace Backend.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidRequest,
-                    description: "The mandatory client_id parameter was missing");
+                    description: "The mandatory 'client_id'/'client_secret' parameters are missing.");
 
                 return;
             }
@@ -105,7 +105,7 @@ namespace Backend.Providers
             {
                 context.Reject(
                     error: OpenIdConnectConstants.Errors.InvalidClient,
-                    description: "Application not found in the database: ensure that your client_id is correct.");
+                    description: "The specified client identifier is invalid.");
 
                 return;
             }
@@ -119,20 +119,14 @@ namespace Backend.Providers
         {
             var database = context.HttpContext.RequestServices.GetRequiredService<ApplicationContext>();
 
-            // Skip validation if the post_logout_redirect_uri parameter was missing.
-            if (string.IsNullOrEmpty(context.PostLogoutRedirectUri))
-            {
-                context.Skip();
-
-                return;
-            }
-
-            // When provided, post_logout_redirect_uri must exactly match the address registered by the client application.
-            if (!await database.Applications.AnyAsync(application => application.LogoutRedirectUri == context.PostLogoutRedirectUri))
+            // When provided, post_logout_redirect_uri must exactly
+            // match the address registered by the client application.
+            if (!string.IsNullOrEmpty(context.PostLogoutRedirectUri) &&
+                !await database.Applications.AnyAsync(application => application.LogoutRedirectUri == context.PostLogoutRedirectUri))
             {
                 context.Reject(
-                    error: OpenIdConnectConstants.Errors.InvalidClient,
-                    description: "Invalid post_logout_redirect_uri.");
+                    error: OpenIdConnectConstants.Errors.InvalidRequest,
+                    description: "The specified 'post_logout_redirect_uri' is invalid.");
 
                 return;
             }
